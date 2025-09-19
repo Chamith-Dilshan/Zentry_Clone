@@ -48,6 +48,16 @@
         background-color: #dfdff0;
         overflow-x: hidden;
     }
+
+    /* Add scrollbar hiding to html and body */
+    html, body {
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    }
+    
+    html::-webkit-scrollbar, body::-webkit-scrollbar {
+        display: none; /* WebKit */
+    }
 }
 
 @utility border-hsla{
