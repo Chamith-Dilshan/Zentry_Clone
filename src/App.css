@@ -42,21 +42,36 @@
         src: url('/fonts/zentry-regular.woff2') format('woff2');
     }
 
-    body{
+    /* Add this CSS reset */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    }
+
+    html::-webkit-scrollbar, body::-webkit-scrollbar {
+        display: none; /* WebKit */
+    }
+
+    body {
         font-family: var(--font-zentry-regular);
-        width: 100vw;
         background-color: #dfdff0;
         overflow-x: hidden;
     }
 
-    /* Add scrollbar hiding to html and body */
-    html, body {
-        scrollbar-width: none; /* Firefox */
-        -ms-overflow-style: none;  /* Internet Explorer 10+ */
-    }
-    
-    html::-webkit-scrollbar, body::-webkit-scrollbar {
-        display: none; /* WebKit */
+    /* Reset default margins for common elements */
+    h1, h2, h3, h4, h5, h6, p, div {
+        margin: 0;
+        padding: 0;
     }
 }
 
