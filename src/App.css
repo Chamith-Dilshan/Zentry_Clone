@@ -248,6 +248,10 @@
   height: 90dvh;
   width: 100%;
   filter: url("#flt_tag");
+
+  @media (min-width: 768px) { /* md */
+    height: 100dvh;
+  }
 }
 
 @utility story-img-mask {
@@ -258,6 +262,13 @@
   height: 100%;
   overflow: hidden;
   clip-path: polygon(4% 0, 83% 21%, 100% 73%, 0% 100%);
+
+  @media (min-width: 768px) { /* md */
+    left: 20%;
+    top: -10%;
+    width: 80%;
+    height: 80%;
+  }
 }
 
 @utility story-img-content {
@@ -268,6 +279,17 @@
   left: 2.5rem;
   top: 4rem;
   transform: translate3d(0, 0, 0) rotateX(0) rotateY(0) rotateZ(0) scale(1);
+
+  @media (min-width: 768px) { /* md */
+    height: 100dvh;
+    left: 0;
+    top: 2.5rem; /* top-10 */
+  }
+
+  @media (min-width: 1024px) { /* lg */
+    left: -300px;
+    top: -100px;
+  }
 }
 
 @utility gallery-img-container {
