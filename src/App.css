@@ -231,9 +231,16 @@
 
 @utility bento-title {
   text-transform: uppercase;
-  font-size: 3.75rem;
+  font-size: 3rem;
   font-weight: 900;
   font-family: var(--font-zentry-regular);
+}
+
+/* Medium screens and up */
+@media (min-width: 768px) {
+  .bento-title {
+    font-size: 4rem; /* Desktop size */
+  }
 }
 
 @utility story-img-container {
