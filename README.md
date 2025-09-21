@@ -2,7 +2,7 @@
 
 A stunning clone of the [Zentry](https://www.zentry.world/) gaming website, built with modern web technologies and featuring advanced animations. This project showcases smooth video transitions, interactive elements, and responsive design.
 
-[Zentry Clone Demo](https://www.zentry.world/)
+[Zentry Clone Demo](https://zentryclone-three.vercel.app/)
 
 ## 🌟 Features
 

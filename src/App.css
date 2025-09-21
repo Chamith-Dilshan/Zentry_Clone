@@ -347,6 +347,24 @@
   }
 }
 
+@utility bg-gradient-radial{
+  background: radial-gradient(circle, var(--tw-gradient-stops));
+}
+
+@utility loading-screen {
+  transition: opacity 0.4s ease-in-out;
+}
+
+@utility loading-progress{
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Loading Screen Animations */
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
 @layer components {
   .three-body {
     --uib-size: 35px;
