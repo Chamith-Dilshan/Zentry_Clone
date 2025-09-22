@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Button from './Button';
 import { TiLocationArrow } from 'react-icons/ti';
 import { useGSAP } from '@gsap/react';
@@ -10,10 +10,15 @@ gsap.registerPlugin(ScrollTrigger)
 
 const Hero = () => {
     const [currentIndex, setCurrentIndex] = useState(1);
+    const [backgroundVideoIndex, setBackgroundVideoIndex] = useState(1);
     const [hasClicked, setHasClicked] = useState(false);
 
     const totalVideos = 4;
+
+    const backgroundVideoRef = useRef<HTMLVideoElement>(null);
     const nextVideoRef = useRef<HTMLVideoElement>(null);
+    const miniVideoRef = useRef<HTMLVideoElement>(null);
+    const syncTimeRef = useRef(0);
 
     // const handelVideoLoad = () => {
     //     setLoadedVideos((prev) => prev + 1);
@@ -35,15 +40,27 @@ const Hero = () => {
     useGSAP(
         () => {
             if (hasClicked) {
+                const animationDuration = 1;
+
                 gsap.set("#next-video", { visibility: "visible" });
                 gsap.to("#next-video", {
                     transformOrigin: "center center",
                     scale: 1,
                     width: "100%",
                     height: "100%",
-                    duration: 1,
+                    duration: animationDuration,
                     ease: "power1.inOut",
                     onStart: () => { void nextVideoRef.current?.play(); },
+                    onComplete: () => {
+                        // 1. Store the playback time, which is the animation's duration
+                        syncTimeRef.current = animationDuration;
+
+                        // 2. Update the background video to trigger the sync effect
+                        setBackgroundVideoIndex(currentIndex);
+
+                        // Reset the transition video for the next click
+                        gsap.set("#next-video", { visibility: "hidden", scale: 0.5, width: "24rem", height: "24rem" });
+                    }
                 });
                 gsap.from("#current-video", {
                     transformOrigin: "center center",
@@ -58,6 +75,30 @@ const Hero = () => {
             revertOnUpdate: true,
         }
     );
+
+    // This effect syncs the new background video's time
+    useEffect(() => {
+        const video = backgroundVideoRef.current;
+        if (!video) return;
+
+        // A function to handle setting the time when the video is ready
+        const syncPlayback = () => {
+            if (video.readyState >= 2) { // Ensure video can be played
+                video.currentTime = syncTimeRef.current;
+                video.play();
+            }
+        };
+
+        // Listen for the 'canplay' event to fire the sync function
+        video.addEventListener('canplay', syncPlayback, { once: true });
+
+        // Fallback for browsers that might have already loaded the video
+        syncPlayback();
+
+        return () => {
+            video.removeEventListener('canplay', syncPlayback);
+        };
+    }, [backgroundVideoIndex]);
 
     useGSAP(() => {
         gsap.set("#video-frame", {
@@ -109,7 +150,8 @@ const Hero = () => {
                             >
                                 <video
                                     key={`mini-${currentIndex}`}
-                                    ref={nextVideoRef}
+                                    //ref={nextVideoRef}
+                                    ref={miniVideoRef}
                                     src={getVideoSource(upcomingVideoIndex())}
                                     poster={getVideoPoster(upcomingVideoIndex())}
                                     loop
@@ -137,13 +179,16 @@ const Hero = () => {
 
                     {/* 1. BACKGROUND VIDEO - Currently playing video */}
                     <video
-                        key={`background-${currentIndex}`}
-                        src={getVideoSource(
-                            currentIndex === totalVideos - 1 ? 1 : currentIndex
-                        )}
-                        poster={getVideoSource(
-                            currentIndex === totalVideos - 1 ? 1 : currentIndex
-                        )}
+                        key={`background-${backgroundVideoIndex}`}
+                        ref={backgroundVideoRef}
+                        src={getVideoSource(backgroundVideoIndex)}
+                        poster={getVideoPoster(backgroundVideoIndex)}
+                        // src={getVideoSource(
+                        //     currentIndex === totalVideos - 1 ? 1 : currentIndex
+                        // )}
+                        // poster={getVideoSource(
+                        //     currentIndex === totalVideos - 1 ? 1 : currentIndex
+                        // )}
                         autoPlay
                         loop
                         muted

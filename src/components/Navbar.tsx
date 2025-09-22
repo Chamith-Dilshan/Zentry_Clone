@@ -7,8 +7,8 @@ import { gsap } from 'gsap';
 const navItems = ['Hero', 'About', 'Features','Story', 'Contact', 'Footer'];
 
 const Navbar = () => {
-    const [isAudioPlaying, setIsAudioPlaying] = useState(false);
-    const [isIndicatorActive, setIsIndicatorActive] = useState(false);
+    const [isAudioPlaying, setIsAudioPlaying] = useState(true);
+    const [isIndicatorActive, setIsIndicatorActive] = useState(true);
     const [lastScrollY, setLastScrollY] = useState(0);
     const [isNavVisible, setIsNavVisible] = useState(true);
 
@@ -42,19 +42,54 @@ const Navbar = () => {
     }, [isNavVisible])
     
     
-
-    const toggleAudioINdicator = () => {
+    const toggleAudioIndicator = () => {
         setIsAudioPlaying((prev) => !prev);
         setIsIndicatorActive((prev) => !prev);
     }
 
+    // useEffect(() => {
+    //     if (isAudioPlaying) { 
+    //         audioElementRef.current?.play();
+    //     } else {
+    //         audioElementRef.current?.pause();
+    //     }
+    // }, [isAudioPlaying])
+    
     useEffect(() => {
-        if (isAudioPlaying) { 
-            audioElementRef.current?.play();
+        const audio = audioElementRef.current;
+        if (!audio) return;
+
+        if (isAudioPlaying) {
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    // Autoplay was blocked by the browser.
+                    console.warn("Audio autoplay was prevented.", error);
+                    // Set state to false so the UI indicator is correct.
+                    setIsAudioPlaying(false);
+                    setIsIndicatorActive(false);
+
+                    // Add a one-time event listener to play on the first user interaction.
+                    const playOnFirstInteraction = () => {
+                        audio.play().then(() => {
+                            setIsAudioPlaying(true);
+                            setIsIndicatorActive(true);
+                        }).catch(err => {
+                            console.error("Failed to play audio even after interaction.", err);
+                        });
+                        // Clean up the listener after it runs.
+                        window.removeEventListener('click', playOnFirstInteraction);
+                        window.removeEventListener('keydown', playOnFirstInteraction);
+                    };
+
+                    window.addEventListener('click', playOnFirstInteraction, { once: true });
+                    window.addEventListener('keydown', playOnFirstInteraction, { once: true });
+                });
+            }
         } else {
-            audioElementRef.current?.pause();
+            audio.pause();
         }
-    }, [isAudioPlaying])
+    }, [isAudioPlaying]);
     
 
   return (
@@ -82,8 +117,13 @@ const Navbar = () => {
                           ))}
                       </div>
                         
-                      <button className='ml-10 flex items-center space-x-0.5' onClick={toggleAudioINdicator}>
-                          <audio src="/audio/loop.mp3" ref={audioElementRef} className='hidden' loop />
+                      <button className='ml-10 flex items-center space-x-0.5' onClick={toggleAudioIndicator}>
+                          <audio
+                              src="/audio/loop.mp3"
+                              ref={audioElementRef}
+                              className='hidden'
+                              loop
+                          />
                               {[1, 2, 3, 4].map((bar) => (
                                   <div
                                     key={bar}
