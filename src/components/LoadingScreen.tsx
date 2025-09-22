@@ -195,11 +195,11 @@ const LoadingScreen = ({ onComplete, videoSources }: LoadingScreenProps) => {
         };
     }, [videosToLoad, totalVideos, isAnimatingOut, onComplete]);
 
-    
+
 
     return (
         <div className='loading-screen fixed inset-0 z-[9999] flex flex-col items-center 
-        justify-center bg-gradient-to-br from-blue-75 via-violet-300 to-blue-300'>
+        justify-center bg-blue-200'>
             {/* Background Animation */}
             <div className='absolute inset-0 overflow-hidden'>
                 <div className='loading-bg-1 absolute -top-1/2 -left-1/2 w-full h-full 
@@ -213,14 +213,14 @@ const LoadingScreen = ({ onComplete, videoSources }: LoadingScreenProps) => {
             {/* Main Loading Content */}
             <div className='relative z-10 text-center'>
                 {/* Logo/Brand */}
-                <div className='loading-text mb-8'>
+                {/* <div className='loading-text mb-8'>
                     <h1 className='special-font text-6xl md:text-8xl text-white mb-4'>
                         Z<span className='text-yellow-300'>E</span>NTRY
                     </h1>
                     <p className='text-white/70 text-lg font-robert-regular'>
                         Enter the Metagame Layer
                     </p>
-                </div>
+                </div> */}
 
                 {/* Progress Section */}
                 <div className='loading-text mt-12 w-80 max-w-sm'>

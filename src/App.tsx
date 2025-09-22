@@ -35,7 +35,7 @@ const App = () => {
       {!showContent && (
         <LoadingScreen
           onComplete={handleLoadingComplete}
-          videoSources={criticalVideos} // Optional: specify videos to track
+          videoSources={criticalVideos}
         />
       )}
 
