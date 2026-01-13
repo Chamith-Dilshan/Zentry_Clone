@@ -73,6 +73,12 @@ A stunning clone of the [Zentry](https://www.zentry.world/) gaming website, buil
    npm run build
    ```
 
+5. **To Upgrade the project**
+   ```bash
+   npx npm-check-updates -u
+   npm i
+   ```
+
 ## 🎨 Project Structure
 
 ```
